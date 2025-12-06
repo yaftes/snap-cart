@@ -4,7 +4,7 @@ export default interface IAuthRepository {
 
   signIn(email: string, password: string): Promise<User>;
   signOut(): Promise<void>;
-  signUp(name: string, email: string, password: string): Promise<void>;
+  signUp(name: string, email: string, password: string): Promise<User>;
   
 }
 

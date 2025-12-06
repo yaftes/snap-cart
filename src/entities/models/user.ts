@@ -3,9 +3,10 @@ export type User = {
     id? : string,
     name? :string,
     email? : string,
-    avatarUrl? : string,
+    passoword? : string,
     role? : 'admin' | 'user',
-    createdAt: Date;
-    updatedAt: Date;
+    token? : string,
+    created_at: Date;
+    updated_at: Date;
 
 }
