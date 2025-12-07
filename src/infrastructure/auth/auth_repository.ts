@@ -25,6 +25,7 @@ export class AuthRepository implements IAuthRepository {
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
+
       if (!isMatch) {
         throw new Error("Invalid email or password");
       }
@@ -51,7 +52,9 @@ export class AuthRepository implements IAuthRepository {
       };
 
       return returnedUser;
+
     } catch (e: any) {
+      
       throw new Error(e.message || "Sign in failed");
     }
   }
