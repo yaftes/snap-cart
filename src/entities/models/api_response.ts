@@ -1,6 +1,6 @@
 
 export type ApiResponse = {
     message : string,
-    status_code : Number,
+    status_code : number,
     data? : any
 }
