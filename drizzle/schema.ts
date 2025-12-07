@@ -1,6 +1,18 @@
 import { integer, pgTable, varchar, timestamp,uuid } from "drizzle-orm/pg-core";
 
 
+export const categoriesTable = pgTable("categories", {
+
+    id: uuid("id").primaryKey().defaultRandom(),
+
+    name: varchar("name", { length: 255 }).notNull(),
+
+    description: varchar("description"),
+
+});
+
+
+
 export const usersTable = pgTable("users", {
 
     id: uuid("id").primaryKey().defaultRandom(),
@@ -35,18 +47,7 @@ export const productsTable = pgTable("products", {
     created_at: timestamp("created_at").defaultNow().notNull(),
     updated_at: timestamp("updated_at").defaultNow().notNull(),
 
-
 });
 
 
-
-export const categoriesTable = pgTable("categories", {
-
-    id: uuid("id").primaryKey().defaultRandom(),
-
-    name: varchar("name", { length: 255 }).notNull(),
-
-    description: varchar("description"),
-
-});
 

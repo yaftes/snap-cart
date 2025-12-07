@@ -1,5 +1,5 @@
 import { AuthController } from "@/src/interface-adapters/controller/auth/auth_controller";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function POST(req : Request) {
 
