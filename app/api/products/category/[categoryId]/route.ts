@@ -4,18 +4,10 @@ import { NextResponse } from "next/server";
 const controller = new ProductController();
 
 
-export async function GET() {
-  try {
-    const result = await controller.getProducts();
-    return NextResponse.json(result.body,{status : result.status});
-  } catch (e: any) {
-    return NextResponse.json({ success: false, message: e.message }, { status: 500 });
-  }
-}
-
-
 export async function POST(req: Request, { params }: { params: { categoryId: string } }) {
+
   try {
+
     const { categoryId } = params; 
     const body = await req.json();
 
@@ -30,7 +22,7 @@ export async function POST(req: Request, { params }: { params: { categoryId: str
 
     const result = await controller.create(categoryId, product);
     return NextResponse.json(result.body, { status: result.status });
-    
+
   } catch (e: any) {
     return NextResponse.json(
       { success: false, message: e.message || "Invalid JSON" },
@@ -38,3 +30,27 @@ export async function POST(req: Request, { params }: { params: { categoryId: str
     );
   }
 }
+
+
+export async function GET(req:Request, { params }: { params: { categoryId: string } }) {
+    try{
+
+        const { categoryId } = params;
+        const result = await controller.getProductByCategory(categoryId);
+
+        return NextResponse.json(result.body, { status: result.status }); 
+
+    }
+    catch(e : any){
+        return NextResponse.json(
+      { success: false, message: e.message || "Invalid JSON" },
+      { status: 400 }
+    );
+
+    }
+}
+
+
+
+
+
