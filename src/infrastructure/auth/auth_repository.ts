@@ -72,7 +72,7 @@ export class AuthRepository implements IAuthRepository {
 
       
       try {
-        const now = new Date();
+
         const inserted = await db
           .insert(usersTable)
           .values({
@@ -84,8 +84,8 @@ export class AuthRepository implements IAuthRepository {
           .returning();
 
 
-
         createdUser = inserted[0];
+
       } catch (err: any) {
         
         if (err.message.includes("duplicate key") || err.message.includes("already exists")) {

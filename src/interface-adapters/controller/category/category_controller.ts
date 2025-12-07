@@ -1,6 +1,12 @@
+import { createCategoryUsecase } from "@/src/application/usecases/category/create_category_usecase";
+import { deleteCategoryUsecase } from "@/src/application/usecases/category/delete_category_usecase";
+import { getCategoriesUsecase } from "@/src/application/usecases/category/get_categories_usecase";
+import { getCategoryUsecase } from "@/src/application/usecases/category/get_category_usecase";
+import { updateCategoryUsecase } from "@/src/application/usecases/category/update_category_usecase";
 import { CategoryRepository } from "@/src/infrastructure/category/category_repository";
 
 export class CategoryController {
+
   private repo: CategoryRepository;
 
   constructor() {
@@ -10,7 +16,9 @@ export class CategoryController {
   
   async create(name: string, description?: string) {
     try {
-      const category = await this.repo.create(name,description);
+
+     const usecase = await createCategoryUsecase(this.repo);
+     const category = await usecase(name,description ?? '');
 
       return {
         status: 201,
@@ -34,18 +42,17 @@ export class CategoryController {
   
   async update(id: string, name: string, description?: string) {
     try {
-      const updated = await this.repo.update(
-        id,
-        name,
-        description
-      );
+
+      const usecase = updateCategoryUsecase(this.repo);
+      const category = await usecase(id,name,description ?? '');
+      
 
       return {
         status: 200,
         body: {
           success: true,
           message: "Category updated successfully",
-          data: updated,
+          data: category,
         },
       };
     } catch (e: any) {
@@ -62,8 +69,10 @@ export class CategoryController {
   
   async getCategory(id: string) {
     try {
-      const category = await this.repo.getCategory(id);
 
+      const usecase = getCategoryUsecase(this.repo);
+      const category = await usecase(id);
+      
       return {
         status: 200,
         body: {
@@ -85,8 +94,10 @@ export class CategoryController {
   
   async getCategories() {
     try {
-      const categories = await this.repo.getCategories();
 
+      const usecase = getCategoriesUsecase(this.repo);
+      const categories = await usecase();
+      
       return {
         status: 200,
         body: {
@@ -107,9 +118,12 @@ export class CategoryController {
 
   
   async delete(id: string) {
+    
     try {
-      await this.repo.delete(id);
 
+      const usecase = deleteCategoryUsecase(this.repo);
+      await usecase(id);
+      
       return {
         status: 200,
         body: {

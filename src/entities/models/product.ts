@@ -2,16 +2,17 @@ export type Product = {
     
     id ?: string,
         
-    name ?: string,
+    name: string,
     
-    description ?: string,
+    description: string ,
 
-    price ?: number,
+    price: number,
 
-    thumbnail_image ?: string,
+    thumbnail_image: string,
 
-    stock ?: number
+    stock ?: number,
 
-    category_id ?: string
+    available_colors ? : string[] 
+
 
 }

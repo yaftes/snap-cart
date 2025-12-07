@@ -4,7 +4,7 @@ import { Product } from "@/src/entities/models/product";
 
 export interface IProductRepository {
 
-    create(product : Product) : Promise<Product> ;
+    create(categoryId : string,product : Product) : Promise<Product> ;
     
     update(product : Product) : Promise<Product>;
 
@@ -13,5 +13,7 @@ export interface IProductRepository {
     getProduct(productId : string) : Promise<Product> ;
 
     getProducts() : Promise<Product[]>;
+
+    getProductsByCategory(categoryId : string) : Promise<Product[]>;
     
 }

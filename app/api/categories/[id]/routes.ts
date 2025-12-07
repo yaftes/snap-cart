@@ -7,7 +7,8 @@ const controller = new CategoryController();
 export async function GET(
   req: Request,
   { params }: { params: { id: string } }
-) {
+) 
+{
   const result = await controller.getCategory(params.id);
 
   return NextResponse.json(result.body, {
@@ -23,13 +24,6 @@ export async function PUT(
   try {
     const body = await req.json();
     const { name, description } = body;
-
-    if (!name) {
-      return NextResponse.json(
-        { success: false, message: "Name is required" },
-        { status: 400 }
-      );
-    }
 
     const result = await controller.update(params.id, name, description);
 
@@ -54,4 +48,5 @@ export async function DELETE(
   return NextResponse.json(result.body, {
     status: result.status,
   });
+  
 }
