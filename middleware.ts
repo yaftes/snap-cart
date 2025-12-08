@@ -5,13 +5,14 @@ import jwt from "jsonwebtoken";
 const AUTH_SECRET = process.env.JWT_SECRET!;
 
 
-const publicRoutes = ["/api/auth/signin", "/api/auth/signup"];
+const publicRoutes = ["/api/auth/sign-in", "/api/auth/sign-up"];
 
 
 const adminRoutes = ["/api/categories"];
 
 
 export function middleware(req: NextRequest) {
+
   const { pathname } = req.nextUrl;
 
   
@@ -21,6 +22,7 @@ export function middleware(req: NextRequest) {
 
   
   const authHeader = req.headers.get("authorization");
+
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return NextResponse.json(
       { success: false, message: "Unauthorized: No token provided" },
@@ -32,6 +34,7 @@ export function middleware(req: NextRequest) {
 
   
   try {
+
     const decoded = jwt.verify(token, AUTH_SECRET) as any;
 
     
@@ -53,10 +56,12 @@ export function middleware(req: NextRequest) {
       request: { headers: requestHeaders },
     });
   } catch (e) {
+
     return NextResponse.json(
       { success: false, message: "Invalid or expired token" },
       { status: 401 }
     );
+
   }
 }
 

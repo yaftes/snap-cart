@@ -45,7 +45,7 @@ export class AuthRepository implements IAuthRepository {
           id: user.id.toString(),
           name: user.name,
           email: user.email,
-          role: "user",
+          role: user.role ?? 'user',
           created_at: user.created_at,
           updated_at: user.updated_at,
           token,
@@ -91,6 +91,7 @@ export class AuthRepository implements IAuthRepository {
         if (err.message.includes("duplicate key") || err.message.includes("already exists")) {
           throw new Error("User with this email already exists");
         }
+        
         throw err;
       }
 
@@ -117,7 +118,7 @@ export class AuthRepository implements IAuthRepository {
         role: createdUser.role,
         created_at: createdUser.created_at,
         updated_at: createdUser.updated_at,
-        token,
+        token : token,
       };
 
       return returnedUser;

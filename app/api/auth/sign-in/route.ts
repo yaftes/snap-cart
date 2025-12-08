@@ -10,12 +10,7 @@ export async function POST(req : Request) {
 
         const response = await authController.signIn(email,password);
 
-        const responsebody : any = {
-            message : response.message,
-        }
-        if(response.data) responsebody.data = response.data;
-
-        return NextResponse.json( responsebody,{status : response.status_code})
+        return NextResponse.json( response.body,{status : response.status})
 
     }
     catch(e){

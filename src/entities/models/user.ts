@@ -4,7 +4,7 @@ export type User = {
     name? :string,
     email? : string,
     passoword? : string,
-    role? : 'admin' | 'user',
+    role? : string,
     token? : string,
     created_at: Date;
     updated_at: Date;

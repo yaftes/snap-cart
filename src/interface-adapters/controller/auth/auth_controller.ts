@@ -11,43 +11,55 @@ export class AuthController {
     this.repo = new AuthRepository();
   }
 
-  async signUp(name: string, email: string, password: string): Promise<ApiResponse> {
+  async signUp(name: string, email: string, password: string) {
     
     try {
+
       const usecase = signUpUseCase(this.repo);
       const user = await usecase(name, email, password);
 
       return {
-        status_code: 201,
-        message: "User registered successfully",
-        data: user
+        status: 201,
+        body : {
+          message: "User registered successfully",
+          data: user
+        }
       };
 
     } catch (e: any) {
+
       return {
-        status_code: 400,
-        message: e.message || "Failed to register user"
+        status: 400,
+        body : {
+          message: e.message || "Failed to register user"
+        } 
       };
+      
     }
   }
 
-  async signIn(email : string,password : string) : Promise<ApiResponse>{
+  async signIn(email : string,password : string){
 
     try{
+
       const usecase = signInUseCase(this.repo);
       const user = await usecase(email, password);
 
       return {
-        status_code: 200,
-        message: "User logged in successfully",
-        data: user
+        status: 200,
+        body : {
+          message: "User logged in successfully",
+          data: user
+        }
       };
 
     }
     catch(e : any){
       return {
-        status_code: 400,
-        message: e.message || "Failed to Loggin  user"
+        status: 400,
+        body : {
+          message: e.message || "Failed to Loggin  user"
+        }
       };
     }
 
