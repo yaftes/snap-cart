@@ -1,6 +1,11 @@
 import { ICategoryRepository } from "../../repositories/category/category_repository_interface";
+import { validateInputString } from "../../services/validators";
 
 
 export const getCategoryUsecase = (repo : ICategoryRepository)  => {
-    return async (categoryId: string) => repo.getCategory(categoryId);
+
+    return async (categoryId: string) => {
+       validateInputString(categoryId,'category id');
+       return repo.getCategory(categoryId);
+    } 
 }

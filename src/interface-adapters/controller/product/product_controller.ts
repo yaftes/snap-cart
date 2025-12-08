@@ -100,6 +100,7 @@ export class ProductController {
 
  
   async getProduct(productId: string) {
+    
     try {
 
         const usecase = await getProductUsecase(this.repo);
@@ -170,5 +171,5 @@ export class ProductController {
     }
   }
 
-  
+
 }

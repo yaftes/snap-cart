@@ -3,8 +3,6 @@ import { IProductRepository } from "../../repositories/product/product_repositor
 import { validateInputString } from "../../services/validators";
 
 
-
-
 export const updateProductUsecase = (repo : IProductRepository)  => {
     return async (product : Product) => {
          if(!product.price) throw new Error('price is required');

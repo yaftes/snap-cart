@@ -15,6 +15,7 @@ export class CategoryController {
 
   
   async create(name: string, description?: string) {
+    
     try {
 
      const usecase = await createCategoryUsecase(this.repo);
@@ -118,7 +119,7 @@ export class CategoryController {
 
   
   async delete(id: string) {
-    
+
     try {
 
       const usecase = deleteCategoryUsecase(this.repo);

@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 
 const controller = new ProductController();
 
+// based on category id
+// create product and getproducts
 
 export async function POST(req: Request, { params }: { params: { categoryId: string } }) {
 
@@ -34,19 +36,15 @@ export async function POST(req: Request, { params }: { params: { categoryId: str
 
 export async function GET(req:Request, { params }: { params: { categoryId: string } }) {
     try{
-
         const { categoryId } = params;
         const result = await controller.getProductByCategory(categoryId);
-
         return NextResponse.json(result.body, { status: result.status }); 
-
     }
     catch(e : any){
         return NextResponse.json(
       { success: false, message: e.message || "Invalid JSON" },
       { status: 400 }
     );
-
     }
 }
 

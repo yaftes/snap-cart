@@ -8,6 +8,7 @@ export const createProductUsecase = (repo : IProductRepository)  => {
     return async (categoryId : string,product : Product) => {
 
         if(!product.price) throw new Error('price is required');
+
         validateInputString(categoryId,'category id');
         validateInputString(product.name,'name');
         validateInputString(product.description,'description');

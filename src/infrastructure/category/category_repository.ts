@@ -9,6 +9,7 @@ export class CategoryRepository implements ICategoryRepository {
   
   async create(name: string, description?: string): Promise<Category> {
     try {
+
       const inserted = await db
         .insert(categoriesTable)
         .values({
@@ -25,7 +26,9 @@ export class CategoryRepository implements ICategoryRepository {
 
   
   async update(categoryId: string, name: string, description?: string): Promise<Category> {
+
     try {
+
       const updated = await db
         .update(categoriesTable)
         .set({
@@ -47,6 +50,7 @@ export class CategoryRepository implements ICategoryRepository {
 
   
   async delete(categoryId: string): Promise<void> {
+
     try {
       const deleted = await db
         .delete(categoriesTable)
@@ -63,7 +67,9 @@ export class CategoryRepository implements ICategoryRepository {
 
   
   async getCategory(categoryId: string): Promise<Category> {
+    
     try {
+
       const category = await db
         .select()
         .from(categoriesTable)

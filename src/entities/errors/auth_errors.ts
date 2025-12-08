@@ -1,12 +1,9 @@
 
-class AppError extends Error {
-
-}
-class UnAuthenticatedError extends AppError {
+class UnAuthenticatedError extends Error {
     
 }
 
-class UnAuthorizedError extends AppError {
+class UnAuthorizedError extends Error {
     
 }
 

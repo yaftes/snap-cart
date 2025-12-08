@@ -12,7 +12,8 @@ export type Product = {
 
     stock ?: number,
 
-    available_colors ? : string[] 
+    available_colors ? : string[],
 
+    
 
 }
