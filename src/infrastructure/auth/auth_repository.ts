@@ -4,7 +4,6 @@ import { User } from "@/src/entities/models/user";
 import db from "../../../drizzle/index";
 import bcrypt from "bcrypt";
 import { Resend } from "resend";
-import crypto from "crypto-js";
 import jwt from "jsonwebtoken";
 import {eq} from "drizzle-orm";
 
@@ -74,32 +73,30 @@ export class AuthRepository implements IAuthRepository {
 
   try {
 
+
+    // TODO : email verification 
+
+  
     const existingUser = await db.select().from(usersTable).where(eq(usersTable.email, email));
 
-    // if ther user exists but there account is not verified
-    // send the email again to that user and tell to verify it
 
     if (existingUser.length > 0) throw new Error("Already registered with this email");
 
     const hashed = await bcrypt.hash(password, 10);
 
    
-    const emailToken = CryptoJS.lib.WordArray.random(32).toString(CryptoJS.enc.Hex);
-    const expires = new Date(Date.now() + 30 * 60 * 1000);
-
     const inserted = await db
       .insert(usersTable)
       .values({
         name,
         email,
         password: hashed,
-        is_verified: false,
-        verification_token: emailToken,
-        verification_expires: expires,
+        is_verified: true,
       })
       .returning();
 
     const createdUser = inserted[0];
+
     if (!createdUser) throw new Error("User creation failed");
 
     const token = jwt.sign(
@@ -108,16 +105,7 @@ export class AuthRepository implements IAuthRepository {
       { expiresIn: "7d" }
     );
 
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    await resend.emails.send({
-      from: "noreply@yourapp.com",
-      to: createdUser.email,
-      subject: "Verify your email",
-      html: `<p>Click to verify your email:</p>
-             <a href="https://yourapp.com/verify?token=${emailToken}">Verify Email</a>`
-    });
-
-
+   
     const returnedUser: User = {
       id: createdUser.id,
       name: createdUser.name!,
@@ -130,8 +118,10 @@ export class AuthRepository implements IAuthRepository {
 
     return returnedUser;
   } catch (e: any) {
-    throw new Error(e.message || "Sign up failed");
+    throw new Error(e.toString() || "Sign up failed");
   }
+
+
 }
 
 }
