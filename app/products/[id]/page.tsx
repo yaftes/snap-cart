@@ -16,7 +16,7 @@ const StarRating = ({ rating, showText = true }: { rating: number, showText?: bo
   </div>
 );
 
-// Helper: Review Card Component
+
 const ReviewCard = ({ name, rating, comment, date }: any) => (
   <div className="border border-gray-200 rounded-[20px] p-6 space-y-3">
     <div className="flex justify-between items-start">

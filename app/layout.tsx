@@ -20,7 +20,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} ${oswald.variable} font-sans`}>
-        <Navbar />
         {children}
       </body>
     </html>

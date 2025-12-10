@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 
 const AUTH_SECRET = process.env.JWT_SECRET!;
 
+
 const publicRoutes = [
   "/api/auth/sign-in",
   "/api/auth/sign-up",
@@ -11,56 +12,73 @@ const publicRoutes = [
 
 
 function isUserGetRoute(pathname: string, method: string) {
-  
+
   if (method !== "GET") return false;
 
   return (
     pathname.startsWith("/api/products") ||
     pathname.startsWith("/api/categories")
   );
+
 }
 
 
 
-export function proxy(req: NextRequest) {
+export default function proxy(req: NextRequest) {
 
   const pathname = req.nextUrl.pathname;
   const method = req.method;
 
   
-  if (
-    publicRoutes.some(route => pathname.startsWith(route)) ||
-    isUserGetRoute(pathname, method)
-  ) {
+  if (publicRoutes.some(route => pathname.startsWith(route))) {
     return NextResponse.next();
   }
 
   
-  const authHeader = req.headers.get("authorization");
-
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return NextResponse.json(
-      { success: false, message: "Unauthorized: No token provided" },
-      { status: 401 }
-    );
+  if (isUserGetRoute(pathname, method)) {
+    return NextResponse.next();
   }
 
-  const token = authHeader.split(" ")[1];
+  
+  const token = req.cookies.get("authToken")?.value;
+
+  if (!token) {
+    
+    if (pathname.startsWith("/admin")) {
+      return NextResponse.redirect(new URL("/auth/sign-in", req.url));
+    }
+
+    return NextResponse.json(
+      { message: "Unauthorized access" },
+      { status: 401 }
+    );
+
+  }
 
   try {
 
     const decoded = jwt.verify(token, AUTH_SECRET) as any;
 
+    
     const requestHeaders = new Headers(req.headers);
     requestHeaders.set("x-user-id", decoded.id);
     requestHeaders.set("x-user-role", decoded.role);
 
     
-    const isAdminRoute =
-      pathname.startsWith("/api/categories") ||
-      pathname.startsWith("/api/products");
+    if (pathname.startsWith("/admin") && decoded.role !== "admin") {
 
-    if (isAdminRoute && method !== "GET") {
+      return NextResponse.redirect(new URL("/auth/sign-in", req.url));
+
+    }
+
+    
+
+    
+    const isAdminApiRoute =
+      pathname.startsWith("/api/products") ||
+      pathname.startsWith("/api/categories");
+
+    if (isAdminApiRoute && method !== "GET") {
       if (decoded.role !== "admin") {
         return NextResponse.json(
           { success: false, message: "Forbidden: Admins only" },
@@ -69,21 +87,22 @@ export function proxy(req: NextRequest) {
       }
     }
 
-    
     return NextResponse.next({
       request: { headers: requestHeaders },
     });
 
   } catch (err) {
+
     return NextResponse.json(
       { success: false, message: "Invalid or expired token" },
       { status: 401 }
     );
+
   }
+
 }
 
 
-
 export const config = {
-  matcher: "/api/:path*",
+  matcher: ["/api/:path*", "/admin/:path*"],
 };

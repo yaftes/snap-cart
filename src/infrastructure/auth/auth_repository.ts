@@ -83,7 +83,6 @@ export class AuthRepository implements IAuthRepository {
 
     if (existingUser.length > 0) throw new ApiError(409,"Already registered with this email");
 
-    console.log(existingUser.length);
 
     const hashed = await bcrypt.hash(password, 10);
 
