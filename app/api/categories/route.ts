@@ -3,18 +3,30 @@ import { NextResponse } from "next/server";
 
 const controller = new CategoryController();
 
-
+// authenticated
 export async function GET() {
 
-  const result = await controller.getCategories();
+  try{
+
+    const result = await controller.getCategories();
 
   return NextResponse.json(result.body, {
     status: result.status,
   });
 
+  }
+  catch(e : any){
+    return NextResponse.json({
+      success : false,
+      message : e.toString() || 'Invalid Json Format'
+    });
+  }
+
+
 }
 
 
+// admin-only
 export async function POST(req: Request) {
   try {
 
@@ -26,11 +38,14 @@ export async function POST(req: Request) {
     return NextResponse.json(result.body, {
       status: result.status,
     });
+
     
   } catch (e: any) {
+
     return NextResponse.json(
       { success: false, message: "Invalid JSON" },
       { status: 400 }
     );
+
   }
 }

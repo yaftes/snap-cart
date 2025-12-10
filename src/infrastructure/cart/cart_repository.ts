@@ -33,13 +33,14 @@ export class CartRepository implements ICartRepository {
       return c;
       
     } catch (error) {
-        
       throw new Error("Failed to create cart");
     }
+      
   }
 
 
   async addItem(cartId: string, productId: string, quantity: number): Promise<CartItem> {
+
     try {
       const [item] = await db
         .insert(cartItemsTable)
@@ -51,6 +52,7 @@ export class CartRepository implements ICartRepository {
     } catch (error) {
       throw new Error("Failed to add item to cart");
     }
+
   }
 
   async updateItemQuantity(itemId: string, quantity: number): Promise<CartItem> {

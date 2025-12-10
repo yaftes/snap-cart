@@ -16,6 +16,7 @@ export async function GET(
   });
 }
 
+// admin-only
 
 export async function PUT(
   req: Request,
@@ -38,7 +39,7 @@ export async function PUT(
   }
 }
 
-
+// admin-only
 export async function DELETE(
   req: Request,
   { params }: { params: { id: string } }

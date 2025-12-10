@@ -13,28 +13,39 @@ export const categoriesTable = pgTable("categories", {
 
 
 export const usersTable = pgTable("users", {
+
+
   id: uuid("id").primaryKey().defaultRandom(),
 
+  
+
   name: varchar("name", { length: 255 }),
+
   email: varchar("email", { length: 255 }).notNull().unique(),
 
   password: varchar("password", { length: 255 }),
 
   role: varchar("role", { length: 50 }).notNull().default("user"),
 
-
   is_verified: boolean("is_verified").notNull().default(false),
+
   verification_token: varchar("verification_token", { length: 255 }),
+
   verification_expires: timestamp("verification_expires"),
 
+
+
+  // for oauth
+
   
-  provider: varchar("provider", { length: 100 }),          
+  provider: varchar("provider", { length: 100 }),  
   provider_id: varchar("provider_id", { length: 255 }),    
 
- 
   created_at: timestamp("created_at").defaultNow().notNull(),
   updated_at: timestamp("updated_at").defaultNow().notNull(),
 });
+
+
 
 
 export const productsTable = pgTable("products", {

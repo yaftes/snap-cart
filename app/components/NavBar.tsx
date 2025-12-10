@@ -3,14 +3,13 @@ import { Search, ShoppingCart, CircleUser, ChevronDown } from "lucide-react";
 
 export default function Navbar() {
   return (
+    
     <nav className="sticky top-0 z-50 bg-white border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between gap-8">
-        {/* Logo */}
         <Link href="/" className="font-oswald font-bold text-3xl tracking-tight uppercase">
           SHOP-CART
         </Link>
 
-        {/* Navigation Links (Hidden on mobile) */}
         <div className="hidden md:flex items-center gap-6 text-sm font-medium text-black">
           <Link href="#" className="flex items-center gap-1">Shop <ChevronDown size={16}/></Link>
           <Link href="#">On Sale</Link>
@@ -18,7 +17,6 @@ export default function Navbar() {
           <Link href="#">Brands</Link>
         </div>
 
-        {/* Search Bar */}
         <div className="flex-1 hidden md:block">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
@@ -30,7 +28,6 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Icons */}
         <div className="flex items-center gap-4">
           <Search className="md:hidden" size={24} />
           <Link href="#"><ShoppingCart size={24} /></Link>

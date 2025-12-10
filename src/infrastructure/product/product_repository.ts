@@ -1,10 +1,8 @@
 import db from "@/drizzle";
-import { productsTable } from "../../../drizzle/schema";
+import { categoriesTable, productsTable } from "../../../drizzle/schema";
 import { IProductRepository } from "@/src/application/repositories/product/product_repository_interface";
 import { Product } from "@/src/entities/models/product";
 import { eq } from "drizzle-orm";
-
-
 
 export class ProductRepository implements IProductRepository {
   
@@ -12,6 +10,10 @@ export class ProductRepository implements IProductRepository {
   async create(categoryId : string,product: Product): Promise<Product> {
 
     try {
+
+      const category = await db.select().from(categoriesTable).where(eq(categoriesTable.id,categoryId));
+
+      if(!category || category.length === 0) throw new Error('Invalid category id');
 
       const inserted = await db
         .insert(productsTable)

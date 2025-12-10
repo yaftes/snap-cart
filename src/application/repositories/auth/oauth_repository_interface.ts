@@ -1,7 +1,8 @@
 
 import { User } from "@/src/entities/models/user";
 
+
 export interface IOAuthRepository {
-    signIn() : Promise<User>;
-    signUp() : Promise<User>;
+    signIn(code : string) : Promise<User>;
+    signUp(code : string) : Promise<User>;
 }

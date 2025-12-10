@@ -3,9 +3,9 @@ import { usersTable } from "../../../drizzle/schema";
 import { User } from "@/src/entities/models/user";
 import db from "../../../drizzle/index";
 import bcrypt from "bcrypt";
-import { Resend } from "resend";
 import jwt from "jsonwebtoken";
 import {eq} from "drizzle-orm";
+import { ApiError } from "next/dist/server/api-utils";
 
 export class AuthRepository implements IAuthRepository {
 
@@ -22,18 +22,20 @@ export class AuthRepository implements IAuthRepository {
 
       const user = existing[0];
 
+      console.log(`${existing.length} CURRENT LENGTH`);
+
       if (!user) {
-        throw new Error("Invalid email or password");
+        throw new ApiError(401,"Invalid email or password");
       }
 
       const isMatch = await bcrypt.compare(password, user.password!);
 
       if (!isMatch) {
-        throw new Error("Invalid email or password");
+        throw new ApiError(401,"Invalid email or password");
       }
 
       if(!user.is_verified) {
-        throw new Error("Verify your account first please");
+        throw new ApiError(403,"Verify your account first please");
       }
 
       const token = jwt.sign(
@@ -61,9 +63,11 @@ export class AuthRepository implements IAuthRepository {
 
     } catch (e: any) {
       
-      throw new Error(e.message || "Sign in failed");
+      throw new ApiError(500,"Sign in failed");
     }
   }
+
+
 
   async signOut(): Promise<void> {
     
@@ -73,14 +77,13 @@ export class AuthRepository implements IAuthRepository {
 
   try {
 
-
-    // TODO : email verification 
-
   
     const existingUser = await db.select().from(usersTable).where(eq(usersTable.email, email));
 
 
-    if (existingUser.length > 0) throw new Error("Already registered with this email");
+    if (existingUser.length > 0) throw new ApiError(409,"Already registered with this email");
+
+    console.log(existingUser.length);
 
     const hashed = await bcrypt.hash(password, 10);
 
@@ -97,7 +100,7 @@ export class AuthRepository implements IAuthRepository {
 
     const createdUser = inserted[0];
 
-    if (!createdUser) throw new Error("User creation failed");
+    if (!createdUser) throw new ApiError(500,"User creation failed");
 
     const token = jwt.sign(
       { id: createdUser.id, email: createdUser.email, role: createdUser.role },
@@ -118,7 +121,7 @@ export class AuthRepository implements IAuthRepository {
 
     return returnedUser;
   } catch (e: any) {
-    throw new Error(e.toString() || "Sign up failed");
+    throw new ApiError(500,"Sign up failed");
   }
 
 
